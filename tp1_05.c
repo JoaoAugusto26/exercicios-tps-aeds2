@@ -7,11 +7,9 @@
 #include <stdlib.h>
 
 /**
- * Conta o comprimento util da linha, parando na quebra de linha.
- * O fgets guarda o '\n' final dentro do vetor, e ele nao faz parte
- * do conteudo lido.
- * @param s vetor de caracteres terminado em '\0'
- * @return numero de caracteres antes de '\0', '\n' ou '\r'
+ * Conta o tamanho util da string, ignorando a quebra de linha.
+ * @param s vetor de caracteres a ser medido
+ * @return numero de caracteres reais da string
  */
 int taman(char s[]){
     int resp = 0;
@@ -24,11 +22,9 @@ int taman(char s[]){
 }
 
 /**
- * Indica se a linha lida e a marca de encerramento da entrada.
- * Devolve int em vez de bool porque a Regra 5 permite apenas os tipos
- * primitivos e as funcoes de stdio.h e stdlib.h.
+ * Verifica se a string lida e a condicao de parada (FIM).
  * @param s linha lida da entrada padrao
- * @return 1 se a linha e exatamente FIM, 0 caso contrario
+ * @return 1 se for FIM, 0 caso contrario
  */
 int fim(char s[]){
     int resp = 0;
@@ -41,13 +37,9 @@ int fim(char s[]){
 }
 
 /**
- * Converte em numero inteiro os digitos presentes na linha, acumulando
- * resp vezes dez mais o valor do digito a cada posicao. Caracteres que
- * nao sao digitos, inclusive o sinal de menos, sao ignorados em vez de
- * zerarem o resultado, de modo que uma linha sem digito algum devolve
- * zero.
- * @param s linha lida da entrada padrao
- * @return valor inteiro formado pelos digitos encontrados
+ * Converte os digitos presentes na string para um numero inteiro.
+ * @param s linha lida da entrada
+ * @return valor inteiro formado pelos digitos
  */
 int Int(char s[]){
     int resp = 0;
@@ -63,14 +55,9 @@ int Int(char s[]){
 }
 
 /**
- * Soma os digitos de um numero inteiro, de forma recursiva.
- * O caso base e n igual a zero, quando nao restam digitos a somar.
- * No caso recursivo, o ultimo digito (n % 10) e somado ao resultado
- * obtido sobre o restante do numero (n / 10). Nao usa contador nem
- * acumulador porque o proprio n encolhe a cada chamada, o que dispensa
- * o metodo auxiliar de inicializacao.
- * @param n numero inteiro nao negativo
- * @return soma dos digitos de n
+ * Metodo recursivo que soma os digitos de um numero inteiro.
+ * @param n numero inteiro para calcular a soma dos digitos
+ * @return soma total dos digitos
  */
 int soma(int n){
     int resp;
@@ -85,12 +72,8 @@ int soma(int n){
 }
 
 /**
- * Le a entrada padrao linha a linha ate encontrar FIM ou o fim do
- * arquivo, e escreve a soma dos digitos de cada linha lida. O laco e
- * controlado pelo retorno do fgets porque a entrada pode terminar sem
- * a marca FIM, e nesse caso o fgets falha sem alterar o vetor, o que
- * deixaria o laco preso na ultima linha.
- * @return 0 ao termino normal do programa
+ * Metodo principal que le as entradas e imprime a soma dos digitos.
+ * @return 0 padrao da linguagem C
  */
 int main(){
     char lin[1000];

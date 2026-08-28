@@ -1,0 +1,69 @@
+/**
+ * Nome: Joao Augusto Moreira Cunha
+ * Materia: AEDS II - PUC Minas
+ * tp1_11
+ */
+import java.util.Scanner;
+
+public class tp1_11 {
+
+    /**
+     * Verifica se a string lida e a condicao de parada (FIM).
+     * @param s string a ser testada
+     * @return true se for FIM, false caso contrario
+     */
+    public static boolean fim(String s){
+        boolean resp = false;
+
+        if(s.length() == 3 && s.charAt(0) == 'F' && s.charAt(1) == 'I' && s.charAt(2) == 'M'){
+            resp = true;
+        }
+
+        return resp;
+    }
+
+    /**
+     * Metodo recursivo para inverter a string.
+     * @param s string original
+     * @param i indice atual da recursao
+     * @return string invertida ate o momento
+     */
+    public static String invertRec(String s, int i){
+        String resp;
+
+        if(i == s.length()){
+            resp = "";
+        } else {
+            resp = invertRec(s, i + 1) + s.charAt(i);
+        }
+
+        return resp;
+    }
+
+    /**
+     * Metodo chamador para inicializar a recursividade.
+     * @param s string original
+     * @return string invertida
+     */
+    public static String invert(String s){
+        return invertRec(s, 0);
+    }
+
+    /**
+     * Metodo principal que le as strings e as imprime invertidas.
+     * @param args argumentos da linha de comando
+     */
+    public static void main(String[] args){
+        Scanner leitor = new Scanner(System.in);
+        while(leitor.hasNextLine() == true){
+            String lin = leitor.nextLine();
+
+            if(fim(lin) == true){
+                break;
+            }
+            System.out.println(invert(lin));
+        }
+
+        leitor.close();
+    }
+}

@@ -57,15 +57,13 @@ class tp1_02{
         Random gerador = new Random();
         gerador.setSeed(4);
         
-        while (leitor.hasNextLine() == true) {
-            String linha = leitor.nextLine();
-            
-            if (fim(linha) == true) {
-                break;
-            }
-            
+        String linha = leitor.nextLine();
+        
+        while (fim(linha) == false) {
             String n = alterar(linha, gerador);
             System.out.println(n);
+            
+            linha = leitor.nextLine();
         }
         
         leitor.close();

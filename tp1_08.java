@@ -1,0 +1,81 @@
+/**
+ * Nome: Joao Augusto Moreira Cunha
+ * Materia: AEDS II - PUC Minas
+ * tp1_08
+ */
+import java.util.Scanner;
+
+public class tp1_08 {
+
+    /**
+     * Verifica se a string lida e a condicao de parada (FIM).
+     * @param s string a ser testada
+     * @return true se for FIM, false caso contrario
+     */
+    public static boolean fim(String s){
+        boolean resp = false;
+
+        if(s.length() == 3 && s.charAt(0) == 'F' && s.charAt(1) == 'I' && s.charAt(2) == 'M'){
+            resp = true;
+        }
+
+        return resp;
+    }
+
+    /**
+     * Verifica se a senha e valida (minimo de 8 caracteres, com maiuscula, minuscula, numero e especial).
+     * @param s string contendo a senha a ser validada
+     * @return true se a senha atender aos criterios, false caso contrario
+     */
+    public static boolean senha(String s){
+        boolean resp = false;
+        boolean maiuscula = false;
+        boolean minuscula = false;
+        boolean num = false;
+        boolean especial = false;
+
+        if(s.length() >= 8){
+            for(int i = 0; i < s.length(); i++){
+                char c = s.charAt(i);
+                
+                if(c >= 'A' && c <= 'Z'){
+                    maiuscula = true;
+                } else if(c >= 'a' && c <= 'z'){
+                    minuscula = true;
+                } else if(c >= '0' && c <= '9'){
+                    num = true;
+                } else {
+                    especial = true;
+                }
+            }
+        }
+
+        if(maiuscula == true && minuscula == true && num == true && especial == true){
+            resp = true;
+        }
+
+        return resp;
+    }
+
+    /**
+     * Metodo principal que le as senhas da entrada e imprime SIM ou NAO.
+     * @param args argumentos da linha de comando
+     */
+    public static void main(String[] args){
+        Scanner leitor = new Scanner(System.in);
+        while(leitor.hasNextLine() == true){
+            String lin = leitor.nextLine();
+
+            if(fim(lin) == true){
+                break;
+            }
+            if(senha(lin) == true){
+                System.out.println("SIM");
+            } else {
+                System.out.println("NAO");
+            }
+        }
+
+        leitor.close();
+    }
+}

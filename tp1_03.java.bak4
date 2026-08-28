@@ -139,12 +139,9 @@ public class tp1_03{
      */
     public static void main(String[] args){
         Scanner leitor = new Scanner(System.in);
-        while(leitor.hasNextLine() == true){
-            String lin = leitor.nextLine();
+        String lin = leitor.nextLine();
 
-            if(fim(lin) == true){
-                break;
-            }
+        while(fim(lin) == false){
             String x1;
             String x2;
             String x3;
@@ -175,6 +172,8 @@ public class tp1_03{
             }
 
             System.out.println(x1 + " " + x2 + " " + x3 + " " + x4);
+            
+            lin = leitor.nextLine();
         }
 
         leitor.close();

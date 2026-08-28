@@ -7,11 +7,9 @@
 #include <stdlib.h>
 
 /**
- * Conta o comprimento util da linha, parando na quebra de linha.
- * O fgets guarda o '\n' final dentro do vetor, e ele nao faz parte
- * do conteudo a ser invertido.
- * @param s vetor de caracteres terminado em '\0'
- * @return numero de caracteres antes de '\0', '\n' ou '\r'
+ * Conta o tamanho real da string, ignorando a quebra de linha.
+ * @param s vetor de caracteres a ser medido
+ * @return tamanho da string
  */
 int taman(char s[]){
     int resp = 0;
@@ -24,11 +22,9 @@ int taman(char s[]){
 }
 
 /**
- * Indica se a linha lida e a marca de encerramento da entrada.
- * Devolve int em vez de bool porque a Regra 5 permite apenas os tipos
- * primitivos e as funcoes de stdio.h e stdlib.h.
+ * Verifica se a string lida e a condicao de parada (FIM).
  * @param s linha lida da entrada padrao
- * @return 1 se a linha e exatamente FIM, 0 caso contrario
+ * @return 1 se for FIM, 0 caso contrario
  */
 int fim(char s[]){
     int resp = 0;
@@ -41,13 +37,9 @@ int fim(char s[]){
 }
 
 /**
- * Copia s para resp na ordem inversa e fecha o resultado com '\0'.
- * O resultado sai pelo segundo parametro porque em C nao se devolve um
- * vetor declarado dentro da funcao: ele deixa de existir quando a
- * chamada termina. Cabe a quem chama fornecer um vetor de destino com
- * espaco suficiente para a string e o terminador.
- * @param s string de origem, preservada
- * @param resp vetor de destino onde a string invertida e escrita
+ * Preenche o vetor de resposta com a string lida de tras pra frente.
+ * @param s string original
+ * @param resp vetor de destino onde a string invertida sera salva
  */
 void inverter(char s[], char resp[]){
     int tam = taman(s);
@@ -62,12 +54,8 @@ void inverter(char s[], char resp[]){
 }
 
 /**
- * Le a entrada padrao linha a linha ate encontrar a marca FIM ou o fim
- * do arquivo, e escreve, para cada linha lida, o seu conteudo invertido.
- * O laco e controlado pelo retorno do fgets porque a entrada pode
- * terminar sem a marca FIM, e nesse caso o fgets falha sem alterar o
- * vetor, o que deixaria o laco preso na ultima linha.
- * @return 0 ao termino normal do programa
+ * Metodo principal que le as entradas e imprime as strings invertidas.
+ * @return 0 padrao da linguagem C
  */
 int main(){
     char lin[1000];

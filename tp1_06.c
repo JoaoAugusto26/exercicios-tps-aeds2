@@ -7,10 +7,9 @@
 #include <stdlib.h>
 
 /**
- * Conta o comprimento util da string, parando no terminador ou na
- * quebra de linha.
- * @param s vetor de caracteres terminado em '\0'
- * @return numero de caracteres antes de '\0', '\n' ou '\r'
+ * Conta o tamanho real da string, parando na quebra de linha ou terminador.
+ * @param s vetor de caracteres a ser medido
+ * @return tamanho da string
  */
 int taman(char s[]){
     int resp = 0;
@@ -23,11 +22,9 @@ int taman(char s[]){
 }
 
 /**
- * Indica se a string lida e a marca de encerramento da entrada.
- * Devolve int em vez de bool porque a Regra 5 permite apenas os tipos
- * primitivos e as funcoes de stdio.h e stdlib.h.
+ * Verifica se a palavra lida e a condicao de parada (FIM).
  * @param s string lida da entrada padrao
- * @return 1 se a string e exatamente FIM, 0 caso contrario
+ * @return 1 se for FIM, 0 caso contrario
  */
 int fim(char s[]){
     int resp = 0;
@@ -40,12 +37,9 @@ int fim(char s[]){
 }
 
 /**
- * Converte uma letra maiuscula na minuscula correspondente e devolve
- * qualquer outro caractere inalterado. A conversao soma a distancia
- * entre 'a' e 'A' porque tolower pertence a ctype.h, biblioteca que
- * esta fora das permitidas pela Regra 5.
- * @param c caractere a converter
- * @return o caractere em minuscula, ou ele mesmo se nao for maiuscula
+ * Converte um caractere maiusculo para minusculo.
+ * @param c caractere que sera convertido
+ * @return o caractere em minuscula, ou ele mesmo se ja for minusculo
  */
 int minusc(char c){
     int resp = c;
@@ -58,15 +52,10 @@ int minusc(char c){
 }
 
 /**
- * Verifica se duas strings sao anagramas, ignorando maiusculas.
- * Tamanhos diferentes ja descartam o par. Nos demais casos, uma tabela
- * de 256 contadores e incrementada pelos caracteres de s1 e decrementada
- * pelos de s2: se toda a tabela terminar zerada, as duas usam exatamente
- * as mesmas letras. O cast para unsigned char impede indice negativo,
- * ja que char tem sinal e um byte acima de 127 acessaria fora do vetor.
- * @param s1 primeira string do par
- * @param s2 segunda string do par
- * @return 1 se sao anagramas, 0 caso contrario
+ * Verifica se duas palavras sao anagramas contando a frequencia das letras.
+ * @param s1 primeira palavra do par
+ * @param s2 segunda palavra do par
+ * @return 1 se forem anagramas, 0 caso contrario
  */
 int anagram(char s1[], char s2[]){
     int resp = 1;
@@ -98,13 +87,8 @@ int anagram(char s1[], char s2[]){
 }
 
 /**
- * Le pares de palavras da entrada padrao ate encontrar FIM ou o fim do
- * arquivo, e escreve SIM ou NAO para cada par conforme sejam anagramas.
- * A largura 999 impede que uma palavra maior que o vetor o ultrapasse,
- * e o retorno do scanf controla o laco porque a entrada pode terminar
- * sem a marca FIM, caso em que o vetor manteria o valor anterior e o
- * laco nunca pararia.
- * @return 0 ao termino normal do programa
+ * Metodo principal que le os pares de palavras e imprime SIM ou NAO.
+ * @return 0 padrao da linguagem C
  */
 int main(){
     char s1[1000];
