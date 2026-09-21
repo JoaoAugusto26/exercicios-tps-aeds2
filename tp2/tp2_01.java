@@ -285,27 +285,27 @@ class LeitorCsv {
         Veiculo[] veiculos = new Veiculo[50000]; 
         int n = 0;
         
-        Scanner scanner = new Scanner(new java.io.File(caminhoArquivo));
+        Scanner leitor = new Scanner(new java.io.File(caminhoArquivo));
         
-        if(scanner.hasNextLine()){
-            scanner.nextLine(); 
+        if(leitor.hasNextLine()){
+            leitor.nextLine(); 
         }
         
-        while(scanner.hasNextLine()){
-            String linha = scanner.nextLine();
+        while(leitor.hasNextLine()){
+            String linha = leitor.nextLine();
             if(linha.length() > 0){
                 veiculos[n] = Veiculo.parseVeiculo(linha);
                 n = n + 1;
             }
         }
-        scanner.close();
+        leitor.close();
         
-        Veiculo[] resposta = new Veiculo[n];
+        Veiculo[] resp = new Veiculo[n];
         for(int i = 0; i < n; i++){
-            resposta[i] = veiculos[i];
+            resp[i] = veiculos[i];
         }
         
-        return resposta;
+        return resp;
     }
 }
 
@@ -319,9 +319,13 @@ public class tp2_01 {
         Veiculo[] frota = LeitorCsv.ler("/tmp/veiculos.csv");
         Scanner leitor = new Scanner(System.in);
         
-        String entrada = leitor.nextLine();
-        
-        while(entrada.equals("-1") == false){
+        while(leitor.hasNextLine() == true){
+            String entrada = leitor.nextLine();
+            
+            if(entrada.equals("-1") == true){
+                break;
+            }
+            
             int idPesquisa = Integer.parseInt(entrada);
             
             for(int i = 0; i < frota.length; i++){
@@ -330,7 +334,6 @@ public class tp2_01 {
                     break;
                 }
             }
-            entrada = leitor.nextLine();
         }
         
         leitor.close();

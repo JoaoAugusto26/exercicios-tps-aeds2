@@ -1,7 +1,7 @@
 /**
  * Nome: Joao Augusto Moreira Cunha
  * Materia: AEDS II - PUC Minas
- * tp2_04
+ * tp2_07
  */
 
 import java.util.Scanner;
@@ -309,86 +309,90 @@ class LeitorCsv {
     }
 }
 
-public class tp2_04 {
+public class tp2_07 {
     /**
-     * Converte uma letra maiuscula na minuscula correspondente e devolve
-     * qualquer outro caractere inalterado.
-     * @param c caractere a converter
-     * @return o caractere em minuscula, ou ele mesmo se nao for maiuscula
+     * Ordena um balde pelo atributo cilindrada usando ordenacao por insercao.
+     * E a mesma insercao da questao anterior, so que aplicada a um pedaco do
+     * vetor e comparando numeros em vez de texto.
+     * O deslocamento so acontece enquanto a cilindrada anterior for
+     * estritamente maior, entao empates mantem a ordem em que entraram no
+     * balde.
+     * @param balde vetor de veiculos de um unico balde
+     * @param n quantidade de veiculos ocupando o balde
      */
-    public static char minusc(char c){
-        char resp = c;
-
-        if(c >= 'A' && c <= 'Z'){
-            resp = (char) (c + ('a' - 'A'));
-        }
-
-        return resp;
-    }
-
-    /**
-     * Compara duas marcas ignorando diferenca de maiusculas e minusculas.
-     * O compareTo compara pelo codigo do caractere e colocaria toda marca em
-     * caixa alta antes de qualquer outra; a saida esperada usa ordem
-     * alfabetica, sem essa separacao.
-     * @param a primeira marca
-     * @param b segunda marca
-     * @return negativo se a vem antes, positivo se vem depois, zero se iguais
-     */
-    public static int compararMarca(String a, String b){
-        int resp = 0;
-        int i = 0;
-
-        while(resp == 0 && (i < a.length() || i < b.length())){
-            char ca = 0;
-            char cb = 0;
-
-            if(i < a.length()){
-                ca = minusc(a.charAt(i));
-            }
-
-            if(i < b.length()){
-                cb = minusc(b.charAt(i));
-            }
-
-            if(ca < cb){
-                resp = -1;
-            } else if(ca > cb){
-                resp = 1;
-            }
-
-            i++;
-        }
-
-        return resp;
-    }
-
-    /**
-     * Ordena o vetor pelo atributo marca usando ordenacao por insercao.
-     * Cada registro e retirado e deslocado para tras enquanto encontrar
-     * marcas maiores que a dele, ate achar o proprio lugar.
-     * A comparacao e feita por compararMarca, e nao por compareTo, para que a
-     * ordem siga o alfabeto independente da caixa das letras.
-     * @param array vetor de veiculos a ser ordenado
-     * @param n quantidade de veiculos no vetor
-     */
-    public static void insercao(Veiculo[] array, int n){
+    public static void insercaoBalde(Veiculo[] balde, int n){
         for(int i = 1; i < n; i++){
-            Veiculo tmp = array[i];
+            Veiculo tmp = balde[i];
             int j = i - 1;
 
-            while(j >= 0 && compararMarca(array[j].getMarca(), tmp.getMarca()) > 0){
-                array[j + 1] = array[j];
+            while(j >= 0 && balde[j].getCilindrada() > tmp.getCilindrada()){
+                balde[j + 1] = balde[j];
                 j--;
             }
 
-            array[j + 1] = tmp;
+            balde[j + 1] = tmp;
+        }
+    }
+
+    /**
+     * Ordena o vetor pelo atributo cilindrada usando o Bucketsort.
+     * O enunciado fixa os parametros: dez baldes e a cilindrada normalizada
+     * pelo valor 8.1. Dividir a cilindrada por 8.1 leva o valor para a faixa
+     * de zero a um, e multiplicar por dez escolhe em qual dos dez baldes o
+     * veiculo cai. Cada balde cobre uma faixa de 0.81 litro.
+     * Depois de distribuir, cada balde e ordenado por insercao e os baldes
+     * sao concatenados na ordem, do primeiro ao ultimo.
+     * Os testes de indice negativo ou acima do ultimo balde existem para o
+     * caso de aparecer uma cilindrada fora da faixa prevista pelo enunciado,
+     * que sem eles acessaria posicao inexistente do vetor.
+     * Como a distribuicao percorre a entrada em ordem e a insercao e estavel,
+     * veiculos de mesma cilindrada mantem a ordem original.
+     * @param array vetor de veiculos a ser ordenado
+     * @param n quantidade de veiculos no vetor
+     */
+    public static void bucketSort(Veiculo[] array, int n){
+        int numBaldes = 10;
+        double normalizador = 8.1;
+
+        Veiculo[][] baldes = new Veiculo[numBaldes][n];
+        int[] tamanho = new int[numBaldes];
+
+        for(int i = 0; i < numBaldes; i++){
+            tamanho[i] = 0;
+        }
+
+        for(int i = 0; i < n; i++){
+            int indice = (int) (array[i].getCilindrada() / normalizador * numBaldes);
+
+            if(indice < 0){
+                indice = 0;
+            }
+
+            if(indice >= numBaldes){
+                indice = numBaldes - 1;
+            }
+
+            baldes[indice][tamanho[indice]] = array[i];
+            tamanho[indice]++;
+        }
+
+        for(int i = 0; i < numBaldes; i++){
+            insercaoBalde(baldes[i], tamanho[i]);
+        }
+
+        int pos = 0;
+
+        for(int i = 0; i < numBaldes; i++){
+            for(int j = 0; j < tamanho[i]; j++){
+                array[pos] = baldes[i][j];
+                pos++;
+            }
         }
     }
 
     /**
      * Le o dataset, guarda em um vetor proprio os veiculos cujos ids aparecem
-     * na entrada padrao, ordena esse vetor por marca e imprime o resultado.
+     * na entrada padrao, ordena esse vetor por cilindrada e imprime o resultado.
      * O laco consulta hasNextLine antes de ler porque a entrada pode terminar
      * sem o -1, e nesse caso o nextLine lancaria excecao.
      * A entrada termina na linha com -1.
@@ -420,7 +424,7 @@ public class tp2_04 {
             }
         }
         
-        insercao(selecionados, numSelecionados);
+        bucketSort(selecionados, numSelecionados);
         
         for(int i = 0; i < numSelecionados; i++){
             System.out.println(selecionados[i].format());

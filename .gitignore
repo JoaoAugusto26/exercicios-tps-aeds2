@@ -5,6 +5,5 @@
 *.out.exe
 
 # backups e saidas de teste
-*.bak
-*.bak[0-9]
+*.bak*
 meu.out
