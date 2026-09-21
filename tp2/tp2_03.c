@@ -99,20 +99,20 @@ void formatData(Data d, char* buffer){
 
 /**
  * Separa a linha do CSV pelas virgulas
- * @param linha linha lida do arquivo
+ * @param l linha lida do arquivo
  * @param colunas matriz que recebe os campos separados
  * @param numColunas recebe a quantidade de campos encontrados
  */
-void splitCsvLine(char* linha, char colunas[][200], int* numColunas){
+void splitCsvLine(char* l, char colunas[][200], int* numColunas){
     int col = 0;
     int pos = 0;
-    for(int i = 0; linha[i] != '\0' && linha[i] != '\n' && linha[i] != '\r'; i++){
-        if(linha[i] == ','){
+    for(int i = 0; l[i] != '\0' && l[i] != '\n' && l[i] != '\r'; i++){
+        if(l[i] == ','){
             colunas[col][pos] = '\0';
             col++;
             pos = 0;
         } else {
-            colunas[col][pos++] = linha[i];
+            colunas[col][pos++] = l[i];
         }
     }
     colunas[col][pos] = '\0';
@@ -147,7 +147,7 @@ void formatDouble(double valor, int casas, char* buffer){
  * @param s linha lida do arquivo
  * @return o veiculo com os campos preenchidos
  */
-Veiculo parseVeiculo(char* s){
+Veiculo parseVeic(char* s){
     Veiculo v;
     char colunas[20][200];
     int numColunas;
@@ -217,15 +217,15 @@ Veiculo parseVeiculo(char* s){
  * @param v veiculo a ser formatado
  * @param buffer vetor que recebe o texto, com espaco suficiente
  */
-void formatVeiculo(Veiculo v, char* buffer){
+void formatVeic(Veiculo v, char* buffer){
     char dataStr[30];
     formatData(v.dataRegistro, dataStr);
 
-    char listaCombustivel[250] = "";
+    char listaComb[250] = "";
     for(int i = 0; i < v.numCombustiveis; i++){
-        concatenar(listaCombustivel, v.combustivel[i]);
+        concatenar(listaComb, v.combustivel[i]);
         if(i < v.numCombustiveis - 1){
-            concatenar(listaCombustivel, ",");
+            concatenar(listaComb, ",");
         }
     }
 
@@ -243,19 +243,19 @@ void formatVeiculo(Veiculo v, char* buffer){
     formatDouble(v.co2, 1, co2Str);
 
     sprintf(buffer, "[%d ## %s ## %s ## %d ## %s ## [%s] ## %d ## %s ## %s ## %s ## %s ## %s ## %s ## %s ## %s]",
-            v.id, v.marca, v.modelo, v.ano, v.categoria, listaCombustivel,
+            v.id, v.marca, v.modelo, v.ano, v.categoria, listaComb,
             v.cilindros, ciliStr, v.transmissao, v.tracao, cidStr, estStr, co2Str,
             turboStr, dataStr);
 }
 
 /**
  * Le o arquivo CSV inteiro e carrega o vetor
- * @param caminhoArquivo caminho do arquivo do dataset
+ * @param caminho caminho do arquivo do dataset
  * @param n recebe a quantidade de veiculos lidos
  * @return ponteiro para o vetor alocado, ou NULL se o arquivo nao abrir
  */
-Veiculo* lerCsv(char* caminhoArquivo, int* n){
-    FILE* file = fopen(caminhoArquivo, "r");
+Veiculo* lerCsv(char* caminho, int* n){
+    FILE* file = fopen(caminho, "r");
     if(file == NULL){
         *n = 0;
         return NULL;
@@ -263,13 +263,13 @@ Veiculo* lerCsv(char* caminhoArquivo, int* n){
 
     Veiculo* vetor = (Veiculo*) malloc(50000 * sizeof(Veiculo));
     *n = 0;
-    char linha[1024];
+    char l[1024];
 
-    fgets(linha, 1024, file);
+    fgets(l, 1024, file);
 
-    while(fgets(linha, 1024, file)){
-        if(taman(linha) > 2){ 
-            vetor[*n] = parseVeiculo(linha);
+    while(fgets(l, 1024, file)){
+        if(taman(l) > 2){ 
+            vetor[*n] = parseVeic(l);
             (*n)++;
         }
     }
@@ -349,22 +349,22 @@ void selecao(Veiculo* v, int n){
  * @return 0 ao termino normal do programa
  */
 int main(){
-    int numVeiculos = 0;
-    Veiculo* frota = lerCsv("/tmp/veiculos.csv", &numVeiculos);
+    int numVeic = 0;
+    Veiculo* frota = lerCsv("/tmp/veiculos.csv", &numVeic);
     
-    Veiculo* selecionados = (Veiculo*) malloc(50000 * sizeof(Veiculo));
-    int numSelecionados = 0;
+    Veiculo* selec = (Veiculo*) malloc(50000 * sizeof(Veiculo));
+    int numSelec = 0;
 
     char entrada[50];
 
     while(scanf("%49s", entrada) == 1 && strcmp(entrada, "-1") != 0){
-        int idPesquisa = atoi(entrada);
+        int idPesq = atoi(entrada);
         
-        for(int i = 0; i < numVeiculos; i++){
-            if(frota[i].id == idPesquisa){
-                if(numSelecionados < 50000){
-                    selecionados[numSelecionados] = frota[i];
-                    numSelecionados++;
+        for(int i = 0; i < numVeic; i++){
+            if(frota[i].id == idPesq){
+                if(numSelec < 50000){
+                    selec[numSelec] = frota[i];
+                    numSelec++;
                 }
 
                 break;
@@ -372,15 +372,15 @@ int main(){
         }
     }
     
-    selecao(selecionados, numSelecionados);
+    selecao(selec, numSelec);
 
-    for(int i = 0; i < numSelecionados; i++){
+    for(int i = 0; i < numSelec; i++){
         char saida[1024];
-        formatVeiculo(selecionados[i], saida);
+        formatVeic(selec[i], saida);
         printf("%s\n", saida);
     }
     
-    free(selecionados);
+    free(selec);
     free(frota);
     return 0;
 }

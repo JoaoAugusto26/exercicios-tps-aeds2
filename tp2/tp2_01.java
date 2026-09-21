@@ -171,7 +171,7 @@ class Veiculo {
      * @param s linha completa do arquivo
      * @return veiculo preenchido
      */
-    public static Veiculo parseVeiculo(String s){
+    public static Veiculo parseVeic(String s){
         Veiculo v = new Veiculo();
         
         String[] colunas = s.split(",");
@@ -254,16 +254,16 @@ class Veiculo {
      * @return string formatada com todas as informacoes
      */
     public String format(){
-        String listaCombustivel = "";
+        String listaComb = "";
         for(int i = 0; i < combustivel.length; i++){
-            listaCombustivel += combustivel[i];
+            listaComb += combustivel[i];
             if(i < combustivel.length - 1){
-                listaCombustivel += ",";
+                listaComb += ",";
             }
         }
         
         return "[" + id + " ## " + marca + " ## " + modelo + " ## " + ano +
-               " ## " + categoria + " ## [" + listaCombustivel + "] ## " + cilindros +
+               " ## " + categoria + " ## [" + listaComb + "] ## " + cilindros +
                " ## " + decimal(cilindrada, 1) + " ## " + transmissao +
                " ## " + tracao + " ## " + decimal(consumoCidade, 2) +
                " ## " + decimal(consumoEstrada, 2) + " ## " + decimal(co2, 1) +
@@ -278,23 +278,23 @@ class Veiculo {
 class LeitorCsv {
     /**
      * Le o arquivo e devolve um vetor com os veiculos instanciados.
-     * @param caminhoArquivo localizacao do CSV
+     * @param caminho localizacao do CSV
      * @return vetor contendo os objetos Veiculo
      */
-    public static Veiculo[] ler(String caminhoArquivo) throws Exception {
-        Veiculo[] veiculos = new Veiculo[50000]; 
+    public static Veiculo[] ler(String caminho) throws Exception {
+        Veiculo[] veics = new Veiculo[50000]; 
         int n = 0;
         
-        Scanner leitor = new Scanner(new java.io.File(caminhoArquivo));
+        Scanner leitor = new Scanner(new java.io.File(caminho));
         
         if(leitor.hasNextLine()){
             leitor.nextLine(); 
         }
         
         while(leitor.hasNextLine()){
-            String linha = leitor.nextLine();
-            if(linha.length() > 0){
-                veiculos[n] = Veiculo.parseVeiculo(linha);
+            String l = leitor.nextLine();
+            if(l.length() > 0){
+                veics[n] = Veiculo.parseVeic(l);
                 n = n + 1;
             }
         }
@@ -302,7 +302,7 @@ class LeitorCsv {
         
         Veiculo[] resp = new Veiculo[n];
         for(int i = 0; i < n; i++){
-            resp[i] = veiculos[i];
+            resp[i] = veics[i];
         }
         
         return resp;
@@ -326,10 +326,10 @@ public class tp2_01 {
                 break;
             }
             
-            int idPesquisa = Integer.parseInt(entrada);
+            int idPesq = Integer.parseInt(entrada);
             
             for(int i = 0; i < frota.length; i++){
-                if(frota[i].getId() == idPesquisa){
+                if(frota[i].getId() == idPesq){
                     System.out.println(frota[i].format());
                     break;
                 }

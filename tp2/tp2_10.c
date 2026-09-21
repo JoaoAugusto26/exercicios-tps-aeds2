@@ -47,9 +47,9 @@ typedef struct {
 } Veiculo;
 
 /**
- * Calcula o numero de caracteres de uma string.
- * @param s String terminada em '\0'.
- * @return Quantidade de caracteres da string.
+ * Retorna o tamanho da string
+ * @param s string terminada em '\0'
+ * @return quantidade de caracteres antes do terminador
  */
 int taman(char* s){
     int resp = 0;
@@ -62,9 +62,9 @@ int taman(char* s){
 }
 
 /**
- * Copia o conteudo da string de origem para o vetor de destino.
- * @param destino Vetor que recebera a copia.
- * @param origem String a ser copiada.
+ * Copia a string de origem para o destino 
+ * @param destino vetor que recebe a copia, com espaco suficiente
+ * @param origem string a ser copiada
  */
 void copiar(char* destino, char* origem){
     int i = 0;
@@ -78,9 +78,9 @@ void copiar(char* destino, char* origem){
 }
 
 /**
- * Concatena a string de origem ao final da string de destino.
- * @param destino String que sera estendida.
- * @param origem String a ser anexada.
+ * Concatena duas strings
+ * @param destino string que sera estendida, com espaco suficiente
+ * @param origem string a ser acrescentada
  */
 void concatenar(char* destino, char* origem){
     int i = taman(destino);
@@ -96,9 +96,9 @@ void concatenar(char* destino, char* origem){
 }
 
 /**
- * Converte uma string no formato "AAAA-MM-DD" para a estrutura Data.
- * @param s String contendo a data.
- * @return Estrutura Data preenchida.
+ * Converte uma string no formato AAAA-MM-DD em uma Data.
+ * @param s trecho da linha do arquivo com a data
+ * @return a Data correspondente
  */
 Data parseData(char* s){
     Data d;
@@ -107,29 +107,30 @@ Data parseData(char* s){
 }
 
 /**
- * Formata uma estrutura Data para o padrao "DD/MM/AAAA".
- * @param d Estrutura Data a ser formatada.
- * @param buffer Vetor de caracteres que recebera o resultado.
+ * Formata a data para o padrao DD/MM/AAAA
+ * @param d data a ser formatada
+ * @param buffer vetor que recebe o texto, com espaco suficiente
  */
 void formatData(Data d, char* buffer){
     sprintf(buffer, "%02d/%02d/%04d", d.dia, d.mes, d.ano);
 }
 
 /**
- * Formata uma estrutura Data para o padrao "DD/MM/AAAA".
- * @param d Estrutura Data a ser formatada.
- * @param buffer Vetor de caracteres que recebera o resultado.
+ * Separa a linha do CSV pelas virgulas
+ * @param l linha lida do arquivo
+ * @param colunas matriz que recebe os campos separados
+ * @param numColunas recebe a quantidade de campos encontrados
  */
-void splitCsvLine(char* linha, char colunas[][200], int* numColunas){
+void splitCsvLine(char* l, char colunas[][200], int* numColunas){
     int col = 0;
     int pos = 0;
-    for(int i = 0; linha[i] != '\0' && linha[i] != '\n' && linha[i] != '\r'; i++){
-        if(linha[i] == ','){
+    for(int i = 0; l[i] != '\0' && l[i] != '\n' && l[i] != '\r'; i++){
+        if(l[i] == ','){
             colunas[col][pos] = '\0';
             col++;
             pos = 0;
         } else {
-            colunas[col][pos++] = linha[i];
+            colunas[col][pos++] = l[i];
         }
     }
     colunas[col][pos] = '\0';
@@ -137,10 +138,10 @@ void splitCsvLine(char* linha, char colunas[][200], int* numColunas){
 }
 
 /**
- * Formata um numero real com ponto como separador decimal e zeros a esquerda, se necessario.
- * @param valor Numero de ponto flutuante a ser formatado.
- * @param casas Quantidade de casas decimais desejadas (1 ou 2).
- * @param buffer Vetor de caracteres que recebera o resultado.
+ * Formata double com casas decimais e ponto
+ * @param valor numero a ser formatado
+ * @param casas quantidade de casas decimais, 1 ou 2
+ * @param buffer vetor que recebe o texto, com espaco suficiente
  */
 void formatDouble(double valor, int casas, char* buffer){
     long fator = 1;
@@ -160,11 +161,11 @@ void formatDouble(double valor, int casas, char* buffer){
 }
 
 /**
- * Instancia e preenche a estrutura Veiculo a partir de uma linha do arquivo CSV.
- * @param s Linha completa do arquivo.
- * @return Estrutura Veiculo com os dados mapeados.
+ * Monta a struct Veiculo lendo os campos da linha do CSV
+ * @param s linha lida do arquivo
+ * @return o veiculo com os campos preenchidos
  */
-Veiculo parseVeiculo(char* s){
+Veiculo parseVeic(char* s){
     Veiculo v;
     char colunas[20][200];
     int numColunas;
@@ -229,19 +230,19 @@ Veiculo parseVeiculo(char* s){
 }
 
 /**
- * Gera a string formatada de saida com todos os dados do veiculo.
- * @param v Estrutura Veiculo a ser processada.
- * @param buffer Vetor de caracteres que armazenara a linha de saida final.
+ * Prepara a string formatada do veiculo para printar
+ * @param v veiculo a ser formatado
+ * @param buffer vetor que recebe o texto, com espaco suficiente
  */
-void formatVeiculo(Veiculo v, char* buffer){
+void formatVeic(Veiculo v, char* buffer){
     char dataStr[30];
     formatData(v.dataRegistro, dataStr);
 
-    char listaCombustivel[250] = "";
+    char listaComb[250] = "";
     for(int i = 0; i < v.numCombustiveis; i++){
-        concatenar(listaCombustivel, v.combustivel[i]);
+        concatenar(listaComb, v.combustivel[i]);
         if(i < v.numCombustiveis - 1){
-            concatenar(listaCombustivel, ",");
+            concatenar(listaComb, ",");
         }
     }
 
@@ -260,19 +261,19 @@ void formatVeiculo(Veiculo v, char* buffer){
     formatDouble(v.co2, 1, co2Str);
 
     sprintf(buffer, "[%d ## %s ## %s ## %d ## %s ## [%s] ## %d ## %s ## %s ## %s ## %s ## %s ## %s ## %s ## %s]",
-            v.id, v.marca, v.modelo, v.ano, v.categoria, listaCombustivel,
+            v.id, v.marca, v.modelo, v.ano, v.categoria, listaComb,
             v.cilindros, ciliStr, v.transmissao, v.tracao, cidStr, estStr, co2Str,
             turboStr, dataStr);
 }
 
 /**
- * Carrega a base de dados do arquivo CSV para um vetor em memoria.
- * @param caminhoArquivo Caminho absoluto ou relativo do dataset.
- * @param n Ponteiro que armazenara o numero total de registros lidos.
- * @return Ponteiro para o vetor alocado dinamicamente com os veiculos.
+ * Le o arquivo CSV inteiro e carrega o vetor
+ * @param caminho caminho do arquivo do dataset
+ * @param n recebe a quantidade de veiculos lidos
+ * @return ponteiro para o vetor alocado, ou NULL se o arquivo nao abrir
  */
-Veiculo* lerCsv(char* caminhoArquivo, int* n){
-    FILE* file = fopen(caminhoArquivo, "r");
+Veiculo* lerCsv(char* caminho, int* n){
+    FILE* file = fopen(caminho, "r");
     if(file == NULL){
         *n = 0;
         return NULL;
@@ -280,13 +281,13 @@ Veiculo* lerCsv(char* caminhoArquivo, int* n){
 
     Veiculo* vetor = (Veiculo*) malloc(50000 * sizeof(Veiculo));
     *n = 0;
-    char linha[1024];
+    char l[1024];
 
-    fgets(linha, 1024, file);
+    fgets(l, 1024, file);
 
-    while(fgets(linha, 1024, file)){
-        if(taman(linha) > 2){ 
-            vetor[*n] = parseVeiculo(linha);
+    while(fgets(l, 1024, file)){
+        if(taman(l) > 2){ 
+            vetor[*n] = parseVeic(l);
             (*n)++;
         }
     }
@@ -297,6 +298,10 @@ Veiculo* lerCsv(char* caminhoArquivo, int* n){
 
 /**
  * Corta a quebra de linha que o fgets deixa no fim do vetor.
+ * O taman conta ate o terminador e por isso incluiria a quebra; aqui a
+ * busca para no primeiro '\n' ou '\r', e o terminador e gravado ali.
+ * Sem isso a linha lida seria comparada com a quebra junto e nunca casaria
+ * com -1 nem com FIM.
  * @param s linha lida pelo fgets, alterada no lugar
  */
 void tirarQuebra(char* s){
@@ -399,7 +404,7 @@ void mostrarFila(Fila* f){
 
     while(i != f->ultimo){
         char saida[1024];
-        formatVeiculo(f->array[i], saida);
+        formatVeic(f->array[i], saida);
         printf("%s\n", saida);
         i = (i + 1) % (CAPACIDADE + 1);
     }
@@ -430,7 +435,7 @@ int procurar(Veiculo* frota, int n, int id){
  * A saida esperada nao tem espaco entre o parentese e a marca.
  * @param v registro removido
  */
-void mostrarRemovido(Veiculo v){
+void mostrarRem(Veiculo v){
     printf("(R)%s %s\n", v.marca, v.modelo);
 }
 
@@ -445,26 +450,26 @@ void mostrarRemovido(Veiculo v){
  * @return 0 ao termino normal do programa
  */
 int main(){
-    int numVeiculos = 0;
-    Veiculo* frota = lerCsv("/tmp/veiculos.csv", &numVeiculos);
+    int numVeic = 0;
+    Veiculo* frota = lerCsv("/tmp/veiculos.csv", &numVeic);
 
     Fila fila;
     iniciarFila(&fila);
 
-    char linha[1024];
+    char l[1024];
 
-    while(fgets(linha, 1024, stdin) != NULL){
-        tirarQuebra(linha);
+    while(fgets(l, 1024, stdin) != NULL){
+        tirarQuebra(l);
 
-        if(strcmp(linha, "-1") == 0){
+        if(strcmp(l, "-1") == 0){
             break;
         }
 
-        int pos = procurar(frota, numVeiculos, atoi(linha));
+        int pos = procurar(frota, numVeic, atoi(l));
 
         if(pos >= 0){
             if(filaCheia(&fila) == 1){
-                mostrarRemovido(desenfileirar(&fila));
+                mostrarRem(desenfileirar(&fila));
             }
 
             enfileirar(&fila, frota[pos]);
@@ -473,32 +478,32 @@ int main(){
 
     int numComandos = 0;
 
-    if(fgets(linha, 1024, stdin) != NULL){
-        tirarQuebra(linha);
-        numComandos = atoi(linha);
+    if(fgets(l, 1024, stdin) != NULL){
+        tirarQuebra(l);
+        numComandos = atoi(l);
     }
 
     for(int i = 0; i < numComandos; i++){
-        if(fgets(linha, 1024, stdin) == NULL){
+        if(fgets(l, 1024, stdin) == NULL){
             break;
         }
 
-        tirarQuebra(linha);
+        tirarQuebra(l);
 
-        if(linha[0] == 'I'){
+        if(l[0] == 'I'){
             /* o atoi pula o espaco sozinho, entao basta comecar depois do I */
-            int pos = procurar(frota, numVeiculos, atoi(linha + 1));
+            int pos = procurar(frota, numVeic, atoi(l + 1));
 
             if(pos >= 0){
                 if(filaCheia(&fila) == 1){
-                    mostrarRemovido(desenfileirar(&fila));
+                    mostrarRem(desenfileirar(&fila));
                 }
 
                 enfileirar(&fila, frota[pos]);
             }
-        } else if(linha[0] == 'R'){
+        } else if(l[0] == 'R'){
             if(filaVazia(&fila) == 0){
-                mostrarRemovido(desenfileirar(&fila));
+                mostrarRem(desenfileirar(&fila));
             }
         }
     }

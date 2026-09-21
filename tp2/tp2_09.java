@@ -171,7 +171,7 @@ class Veiculo {
      * @param s linha completa do arquivo
      * @return veiculo preenchido
      */
-    public static Veiculo parseVeiculo(String s){
+    public static Veiculo parseVeic(String s){
         Veiculo v = new Veiculo();
         
         String[] colunas = s.split(",");
@@ -254,16 +254,16 @@ class Veiculo {
      * @return string formatada com todas as informacoes
      */
     public String format(){
-        String listaCombustivel = "";
+        String listaComb = "";
         for(int i = 0; i < combustivel.length; i++){
-            listaCombustivel += combustivel[i];
+            listaComb += combustivel[i];
             if(i < combustivel.length - 1){
-                listaCombustivel += ",";
+                listaComb += ",";
             }
         }
         
         return "[" + id + " ## " + marca + " ## " + modelo + " ## " + ano +
-               " ## " + categoria + " ## [" + listaCombustivel + "] ## " + cilindros +
+               " ## " + categoria + " ## [" + listaComb + "] ## " + cilindros +
                " ## " + decimal(cilindrada, 1) + " ## " + transmissao +
                " ## " + tracao + " ## " + decimal(consumoCidade, 2) +
                " ## " + decimal(consumoEstrada, 2) + " ## " + decimal(co2, 1) +
@@ -278,23 +278,23 @@ class Veiculo {
 class LeitorCsv {
     /**
      * Le o arquivo e devolve um vetor com os veiculos instanciados.
-     * @param caminhoArquivo localizacao do CSV
+     * @param caminho localizacao do CSV
      * @return vetor contendo os objetos Veiculo
      */
-    public static Veiculo[] ler(String caminhoArquivo) throws Exception {
-        Veiculo[] veiculos = new Veiculo[50000]; 
+    public static Veiculo[] ler(String caminho) throws Exception {
+        Veiculo[] veics = new Veiculo[50000]; 
         int n = 0;
         
-        Scanner leitor = new Scanner(new java.io.File(caminhoArquivo));
+        Scanner leitor = new Scanner(new java.io.File(caminho));
         
         if(leitor.hasNextLine()){
             leitor.nextLine(); 
         }
         
         while(leitor.hasNextLine()){
-            String linha = leitor.nextLine();
-            if(linha.length() > 0){
-                veiculos[n] = Veiculo.parseVeiculo(linha);
+            String l = leitor.nextLine();
+            if(l.length() > 0){
+                veics[n] = Veiculo.parseVeic(l);
                 n = n + 1;
             }
         }
@@ -302,7 +302,7 @@ class LeitorCsv {
         
         Veiculo[] resp = new Veiculo[n];
         for(int i = 0; i < n; i++){
-            resp[i] = veiculos[i];
+            resp[i] = veics[i];
         }
         
         return resp;
@@ -340,10 +340,10 @@ class Lista {
      * Insere um registro na primeira posicao, deslocando os demais uma casa
      * para a direita. O deslocamento comeca do fim para o inicio, senao cada
      * copia sobrescreveria a posicao ainda nao movida.
-     * @param veiculo registro a ser inserido
+     * @param veic registro a ser inserido
      * @throws Exception se a lista estiver cheia
      */
-    public void inserirInicio(Veiculo veiculo) throws Exception {
+    public void inserirInicio(Veiculo veic) throws Exception {
         if(n >= array.length){
             throw new Exception("Erro: lista cheia");
         }
@@ -352,33 +352,33 @@ class Lista {
             array[i] = array[i - 1];
         }
 
-        array[0] = veiculo;
+        array[0] = veic;
         n++;
     }
 
     /**
      * Insere um registro na ultima posicao ocupada da lista.
      * Nao ha deslocamento: a posicao n esta livre por definicao.
-     * @param veiculo registro a ser inserido
+     * @param veic registro a ser inserido
      * @throws Exception se a lista estiver cheia
      */
-    public void inserirFim(Veiculo veiculo) throws Exception {
+    public void inserirFim(Veiculo veic) throws Exception {
         if(n >= array.length){
             throw new Exception("Erro: lista cheia");
         }
 
-        array[n] = veiculo;
+        array[n] = veic;
         n++;
     }
 
     /**
      * Insere um registro na posicao informada e desloca os demais para a
      * direita, do fim para o inicio pelo mesmo motivo do inserirInicio.
-     * @param veiculo registro a ser inserido
+     * @param veic registro a ser inserido
      * @param posicao posicao de destino, entre zero e n
      * @throws Exception se a lista estiver cheia ou a posicao for invalida
      */
-    public void inserir(Veiculo veiculo, int posicao) throws Exception {
+    public void inserir(Veiculo veic, int posicao) throws Exception {
         if(n >= array.length){
             throw new Exception("Erro: lista cheia");
         }
@@ -391,7 +391,7 @@ class Lista {
             array[i] = array[i - 1];
         }
 
-        array[posicao] = veiculo;
+        array[posicao] = veic;
         n++;
     }
 
@@ -497,10 +497,10 @@ public class tp2_09 {
      * Escreve na saida a marca e o modelo de um registro removido.
      * O enunciado pede a palavra (R) seguida dos dois atributos, e a saida
      * esperada nao tem espaco entre o parentese e a marca.
-     * @param veiculo registro que acabou de sair da lista
+     * @param veic registro que acabou de sair da lista
      */
-    public static void mostrarRemovido(Veiculo veiculo){
-        System.out.println("(R)" + veiculo.getMarca() + " " + veiculo.getModelo());
+    public static void mostrarRem(Veiculo veic){
+        System.out.println("(R)" + veic.getMarca() + " " + veic.getModelo());
     }
 
     /**
@@ -549,11 +549,11 @@ public class tp2_09 {
             } else if(comando.equals("I*") == true){
                 lista.inserir(procurar(frota, Integer.parseInt(partes[2])), Integer.parseInt(partes[1]));
             } else if(comando.equals("RI") == true){
-                mostrarRemovido(lista.removerInicio());
+                mostrarRem(lista.removerInicio());
             } else if(comando.equals("RF") == true){
-                mostrarRemovido(lista.removerFim());
+                mostrarRem(lista.removerFim());
             } else if(comando.equals("R*") == true){
-                mostrarRemovido(lista.remover(Integer.parseInt(partes[1])));
+                mostrarRem(lista.remover(Integer.parseInt(partes[1])));
             }
         }
 
