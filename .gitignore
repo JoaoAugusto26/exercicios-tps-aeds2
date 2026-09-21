@@ -7,3 +7,6 @@
 # backups e saidas de teste
 *.bak*
 meu.out
+
+# dataset do professor, nao e trabalho nosso
+veiculos.csv
