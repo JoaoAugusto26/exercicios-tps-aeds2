@@ -450,6 +450,7 @@ public class tp2_12 {
      * seguinte e I com um id para empilhar ou R sozinho para desempilhar.
      * Cada remocao escreve uma linha; no fim a pilha inteira e mostrada a
      * partir do topo.
+     * O laco tambem para se a entrada acabar antes da contagem prometida.
      * @param args argumentos da linha de comando
      */
     public static void main(String[] args) throws Exception {

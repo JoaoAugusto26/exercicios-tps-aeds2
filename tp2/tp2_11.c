@@ -354,6 +354,22 @@ void iniciarLista(Lista* l){
 }
 
 /**
+ * Indica se a lista esta vazia, o que acontece quando o unico no e a cabeca,
+ * ou seja, quando primeiro e ultimo coincidem.
+ * @param l lista a ser consultada
+ * @return 1 se estiver vazia, 0 caso contrario
+ */
+int listaVazia(Lista* l){
+    int resp = 0;
+
+    if(l->primeiro == l->ultimo){
+        resp = 1;
+    }
+
+    return resp;
+}
+
+/**
  * Insere um registro logo depois da cabeca, isto e, na primeira posicao.
  * Diferente da lista sequencial, nada e deslocado: so dois ponteiros mudam.
  * Se a lista estava vazia, a nova celula tambem passa a ser a ultima.
@@ -595,13 +611,20 @@ int main(){
                 inserir(&lista, frota[pos], posicao);
             }
         } else if(l[0] == 'R' && l[1] == 'I'){
-            mostrarRem(removerInicio(&lista));
+            if(listaVazia(&lista) == 0){
+                mostrarRem(removerInicio(&lista));
+            }
         } else if(l[0] == 'R' && l[1] == 'F'){
-            mostrarRem(removerFim(&lista));
+            if(listaVazia(&lista) == 0){
+                mostrarRem(removerFim(&lista));
+            }
         } else if(l[0] == 'R' && l[1] == '*'){
             int posicao = 0;
             sscanf(l + 2, "%d", &posicao);
-            mostrarRem(remover(&lista, posicao));
+
+            if(listaVazia(&lista) == 0){
+                mostrarRem(remover(&lista, posicao));
+            }
         }
     }
 

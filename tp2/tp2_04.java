@@ -7,7 +7,7 @@
 import java.util.Scanner;
 
 /**
- * Estrutura dedicada ao armazenamento e formatacao da data de registro.
+ * Representa a data de registro de um veiculo.
  */
 class Data {
     private int ano;
@@ -36,9 +36,9 @@ class Data {
     }
 
     /**
-     * Getters e Setters
-     * Garantem o encapsulamento da classe. O acesso aos campos privados
-     * e feito exclusivamente por meio destes metodos.
+     * Metodos de acesso aos atributos da data. Cada get devolve o valor do
+     * campo correspondente e cada set o substitui. Como os atributos sao
+     * privados, o acesso de fora da classe passa obrigatoriamente por eles.
      */
     public int getAno(){ return ano; }
     public void setAno(int ano){ this.ano = ano; }
@@ -285,27 +285,27 @@ class LeitorCsv {
         Veiculo[] veics = new Veiculo[50000]; 
         int n = 0;
         
-        Scanner scanner = new Scanner(new java.io.File(caminho));
+        Scanner leitor = new Scanner(new java.io.File(caminho));
         
-        if(scanner.hasNextLine()){
-            scanner.nextLine(); 
+        if(leitor.hasNextLine()){
+            leitor.nextLine(); 
         }
         
-        while(scanner.hasNextLine()){
-            String l = scanner.nextLine();
+        while(leitor.hasNextLine()){
+            String l = leitor.nextLine();
             if(l.length() > 0){
                 veics[n] = Veiculo.parseVeic(l);
                 n = n + 1;
             }
         }
-        scanner.close();
+        leitor.close();
         
-        Veiculo[] resposta = new Veiculo[n];
+        Veiculo[] resp = new Veiculo[n];
         for(int i = 0; i < n; i++){
-            resposta[i] = veics[i];
+            resp[i] = veics[i];
         }
         
-        return resposta;
+        return resp;
     }
 }
 

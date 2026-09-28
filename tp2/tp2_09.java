@@ -337,6 +337,19 @@ class Lista {
     }
 
     /**
+     * Indica se a lista esta vazia, o que acontece quando n vale zero.
+     * @return true se nao houver nenhum registro, false caso contrario
+     */
+    public boolean vazia(){
+        boolean resp = false;
+
+        if(n == 0){
+            resp = true;
+        }
+
+        return resp;
+    }
+    /**
      * Insere um registro na primeira posicao, deslocando os demais uma casa
      * para a direita. O deslocamento comeca do fim para o inicio, senao cada
      * copia sobrescreveria a posicao ainda nao movida.
@@ -513,6 +526,7 @@ public class tp2_09 {
      * comandos de insercao vem junto o id do registro; no I* a posicao vem
      * antes do id.
      * Cada remocao escreve uma linha; no fim a lista inteira e mostrada.
+     * O laco tambem para se a entrada acabar antes da contagem prometida.
      * @param args argumentos da linha de comando
      */
     public static void main(String[] args) throws Exception {
@@ -538,7 +552,7 @@ public class tp2_09 {
             numComandos = Integer.parseInt(leitor.nextLine());
         }
 
-        for(int i = 0; i < numComandos; i++){
+        for(int i = 0; i < numComandos && leitor.hasNextLine() == true; i++){
             String[] partes = leitor.nextLine().split(" ");
             String comando = partes[0];
 
@@ -549,11 +563,17 @@ public class tp2_09 {
             } else if(comando.equals("I*") == true){
                 lista.inserir(procurar(frota, Integer.parseInt(partes[2])), Integer.parseInt(partes[1]));
             } else if(comando.equals("RI") == true){
-                mostrarRem(lista.removerInicio());
+                if(lista.vazia() == false){
+                    mostrarRem(lista.removerInicio());
+                }
             } else if(comando.equals("RF") == true){
-                mostrarRem(lista.removerFim());
+                if(lista.vazia() == false){
+                    mostrarRem(lista.removerFim());
+                }
             } else if(comando.equals("R*") == true){
-                mostrarRem(lista.remover(Integer.parseInt(partes[1])));
+                if(lista.vazia() == false){
+                    mostrarRem(lista.remover(Integer.parseInt(partes[1])));
+                }
             }
         }
 

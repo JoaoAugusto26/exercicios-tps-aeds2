@@ -586,6 +586,7 @@ public class tp2_13 {
      * comandos de insercao vem junto o id do registro; no I* a posicao vem
      * antes do id.
      * Cada remocao escreve uma linha; no fim a lista inteira e mostrada.
+     * O laco tambem para se a entrada acabar antes da contagem prometida.
      * @param args argumentos da linha de comando
      */
     public static void main(String[] args) throws Exception {
