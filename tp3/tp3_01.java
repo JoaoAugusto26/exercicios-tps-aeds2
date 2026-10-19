@@ -310,22 +310,17 @@ class LeitorCsv {
 }
 
 /**
- * Questao 1 do Trabalho Pratico 3: ordenacao por mergesort.
+ * Questao 1 do TP3: ordenacao por mergesort.
  */
 public class tp3_01 {
 
     /**
-     * Compara dois veiculos pela chave da ordenacao: primeiro o consumo na
-     * cidade e, em caso de empate, a categoria.
-     * A categoria usa o compareTo direto, sem ignorar a caixa como na questao
-     * 4 do TP2: as treze categorias do dataset seguem a mesma convencao de
-     * maiusculas, entao a ordem pelo codigo do caractere ja e a alfabetica.
+     * Compara dois veiculos pelo consumo na cidade e, se empatar, pela categoria.
      * @param a primeiro veiculo
      * @param b segundo veiculo
-     * @return negativo se a vem antes, positivo se vem depois, zero se
-     *         empatarem nas duas chaves
+     * @return negativo se a vem antes, positivo se vem depois, zero se iguais
      */
-    public static int comparar(Veiculo a, Veiculo b){
+    public static int comp(Veiculo a, Veiculo b){
         int resp = 0;
 
         if(a.getConsumoCidade() < b.getConsumoCidade()){
@@ -340,46 +335,38 @@ public class tp3_01 {
     }
 
     /**
-     * Ordena o vetor com mergesort. Este metodo so faz a primeira chamada
-     * recursiva, com os limites do vetor inteiro.
-     * @param array vetor de veiculos a ser ordenado
-     * @param n quantidade de veiculos no vetor
+     * Ordena o vetor com mergesort, chamando a recursao para o vetor inteiro.
+     * @param array vetor de veiculos
+     * @param n quantidade de veiculos
      */
     public static void mergesort(Veiculo[] array, int n){
         mergesort(array, 0, n - 1);
     }
 
     /**
-     * Divide o trecho entre esq e dir ao meio, ordena cada metade
-     * recursivamente e depois intercala as duas metades ja ordenadas.
-     * Um trecho com um elemento so ja esta ordenado, e e ai que a recursao
-     * para.
+     * Divide o trecho ao meio, ordena cada metade e depois intercala as duas.
      * @param array vetor de veiculos
-     * @param esq primeira posicao do trecho
-     * @param dir ultima posicao do trecho
+     * @param esq inicio do trecho
+     * @param dir fim do trecho
      */
     public static void mergesort(Veiculo[] array, int esq, int dir){
         if(esq < dir){
             int meio = (esq + dir) / 2;
             mergesort(array, esq, meio);
             mergesort(array, meio + 1, dir);
-            intercalar(array, esq, meio, dir);
+            interc(array, esq, meio, dir);
         }
     }
 
     /**
-     * Junta duas metades vizinhas e ja ordenadas, a de esq ate meio e a de
-     * meio + 1 ate dir, em um unico trecho ordenado.
-     * As metades sao copiadas para dois vetores auxiliares, e a cada passo o
-     * menor entre os primeiros de cada uma volta para o vetor original. No
-     * empate sai o da metade da esquerda, o que mantem a ordem de entrada
-     * entre registros iguais e deixa o mergesort estavel.
+     * Intercala duas metades ja ordenadas. No empate pega a da esquerda,
+     * o que deixa o mergesort estavel.
      * @param array vetor de veiculos
-     * @param esq inicio da metade da esquerda
-     * @param meio fim da metade da esquerda
-     * @param dir fim da metade da direita
+     * @param esq inicio da metade esquerda
+     * @param meio fim da metade esquerda
+     * @param dir fim da metade direita
      */
-    public static void intercalar(Veiculo[] array, int esq, int meio, int dir){
+    public static void interc(Veiculo[] array, int esq, int meio, int dir){
         int n1 = meio - esq + 1;
         int n2 = dir - meio;
 
@@ -402,7 +389,7 @@ public class tp3_01 {
         j = 0;
 
         while(i < n1 && j < n2){
-            if(comparar(a1[i], a2[j]) <= 0){
+            if(comp(a1[i], a2[j]) <= 0){
                 array[k] = a1[i];
                 i++;
             } else {
@@ -427,12 +414,7 @@ public class tp3_01 {
     }
 
     /**
-     * Le o dataset, guarda em um vetor proprio os veiculos cujos ids aparecem
-     * na entrada padrao, ordena esse vetor por consumo na cidade, com a
-     * categoria como desempate, e imprime o resultado.
-     * O laco consulta hasNextLine antes de ler porque a entrada pode terminar
-     * sem o -1, e nesse caso o nextLine lancaria excecao.
-     * A entrada termina na linha com -1.
+     * Le os ids ate o -1, ordena os veiculos escolhidos e imprime.
      * @param args argumentos da linha de comando
      */
     public static void main(String[] args) throws Exception {
